@@ -39,4 +39,4 @@ jobs:
           body: "Release generado automáticamente desde GitHub Actions."
           files: build/app/outputs/flutter-apk/app-release.apk
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
