@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:prueba_jairo_rios/core/size_constans.dart';
@@ -80,18 +81,34 @@ class _FormScreenState extends ConsumerState<FormScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
+              keyboardType: TextInputType.text,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]')),
+              ],
               controller: _nameController,
               decoration: const InputDecoration(
                 labelText: StringConstants.formScreenNameField,
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(SizeConstants.size20),
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: SizeConstants.size12),
             TextField(
+              keyboardType: TextInputType.text,
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]')),
+              ],
               controller: _lastNameController,
               decoration: const InputDecoration(
                 labelText: StringConstants.formScreenLastNameField,
-                border: OutlineInputBorder(),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(SizeConstants.size20),
+                  ),
+                ),
               ),
             ),
             const SizedBox(height: SizeConstants.size12),
@@ -102,7 +119,11 @@ class _FormScreenState extends ConsumerState<FormScreen> {
                   controller: _birthdayController,
                   decoration: const InputDecoration(
                     labelText: StringConstants.formScreenBirthdayField,
-                    border: OutlineInputBorder(),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(SizeConstants.size20),
+                      ),
+                    ),
                     suffixIcon: Icon(Icons.calendar_today),
                   ),
                 ),
@@ -167,33 +188,42 @@ class _FormScreenState extends ConsumerState<FormScreen> {
               runSpacing: SizeConstants.size8,
               alignment: WrapAlignment.center,
               children: [
-                OutlinedButton.icon(
-                  onPressed: () async {
-                    await addAddress();
-                  },
-                  icon: const Icon(Icons.add_location_alt_outlined),
-                  label: const TextWidget(
-                      text: StringConstants.formScreenAddAddress),
-                ),
-                ElevatedButton.icon(
-                  onPressed: () async {
-                    await addUser(context, ref);
-                  },
-                  icon: const Icon(Icons.save_alt),
-                  label: const TextWidget(
-                      text: StringConstants.formScreenSaveUserData),
-                  style: ElevatedButton.styleFrom(
-                    minimumSize:
-                        const Size(double.infinity, SizeConstants.size48),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: () async {
+                      await addAddress();
+                    },
+                    icon: const Icon(Icons.add_location_alt_outlined),
+                    label: const TextWidget(
+                        text: StringConstants.formScreenAddAddress),
                   ),
                 ),
-                TextButton.icon(
-                  onPressed: () {
-                    goToViewAddress(context);
-                  },
-                  icon: const Icon(Icons.list_alt_outlined),
-                  label: const TextWidget(
-                      text: StringConstants.formScreenViewAddress),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    onPressed: () async {
+                      await addUser(context, ref);
+                    },
+                    icon: const Icon(Icons.save_alt),
+                    label: const TextWidget(
+                        text: StringConstants.formScreenSaveUserData),
+                    style: ElevatedButton.styleFrom(
+                      minimumSize:
+                          const Size(double.infinity, SizeConstants.size48),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: TextButton.icon(
+                    onPressed: () {
+                      goToViewAddress(context);
+                    },
+                    icon: const Icon(Icons.list_alt_outlined),
+                    label: const TextWidget(
+                        text: StringConstants.formScreenViewAddress),
+                  ),
                 ),
               ],
             ),

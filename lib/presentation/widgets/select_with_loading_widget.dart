@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartz/dartz.dart';
+import 'package:prueba_jairo_rios/core/size_constans.dart';
 import 'package:prueba_jairo_rios/core/strings_constants.dart';
 import 'package:prueba_jairo_rios/presentation/widgets/text_widget.dart';
 
@@ -40,6 +41,14 @@ class SelectWithLoadingWidget<T> extends ConsumerWidget {
         return SizedBox(
           width: double.infinity,
           child: DropdownButtonFormField<T>(
+            decoration: InputDecoration(
+              labelText: hint,
+              border: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(
+                  Radius.circular(SizeConstants.size20),
+                ),
+              ),
+            ),
             isExpanded: true,
             hint: TextWidget(text: hint),
             items: items

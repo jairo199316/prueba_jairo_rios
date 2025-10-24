@@ -36,7 +36,7 @@ class StringConstants {
   static const String formScreenBirthdayField = 'Fecha de nacimiento';
   static const String formScreenSelectCountry = 'Selecciona un país';
   static const String formScreenSelectState = 'Selecciona un estado';
-  static const String formScreenSelectCity = 'Ciudad';
+  static const String formScreenSelectCity = 'Selecciona una Ciudad';
   static const String formScreenCountryStateCityRequired =
       'Selecciona país, estado y ciudad antes de agregar una dirección';
   static const String formScreenAddressAdded =
