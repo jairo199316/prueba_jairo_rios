@@ -44,6 +44,21 @@ Comportamiento y notas prácticas:
 - Los providers de estados/ciudades están implementados como *family* para poder parametrizarlos por país o por el par (país, estado).
 - En los tests, estos providers se reemplazan mediante `ProviderScope(overrides: [...])` y se devuelven respuestas deterministas (por ejemplo `Right(CountriesResponse(...))`) para mantener las pruebas aisladas y rápidas.
 
+### CI / Workflow
+
+Este repositorio incluye un workflow de GitHub Actions definido en `.github/workflows/flutter_ci.yml`. El workflow se ejecuta en eventos `push` y `pull_request` sobre la rama `main`. Resumen de los pasos que realiza:
+
+- Checkout del código fuente (`actions/checkout@v3`).
+- Configuración del entorno Flutter con la acción `subosito/flutter-action@v2` (la versión usada en el workflow es `3.24.3`).
+- Instalación de dependencias: `flutter pub get`.
+- Build de la app para Android: `flutter build apk --release`.
+- Subida del APK generado como artifact (`actions/upload-artifact@v4`) — nombre: `app-release-apk` y ruta: `build/app/outputs/flutter-apk/app-release.apk`.
+- Creación automática de un Release en GitHub usando `softprops/action-gh-release@v2`, con un tag `build-<run_number>` y adjuntando el APK. Esta acción requiere el token `GITHUB_TOKEN` configurado en secretos (en este repo se lee `secrets.GH_PAT`).
+
+Puntos de atención:
+- El workflow asume que la plataforma de ejecución (ubuntu-latest) tenga las dependencias del sistema necesarias para Flutter (la acción `subosito/flutter-action` se encarga de instalar Flutter pero pueden requerirse herramientas adicionales dependiendo de la configuración del proyecto).
+- Si deseas que el workflow además ejecute los tests (`flutter test`) o realice análisis estático (`flutter analyze`), puedo actualizar el archivo `flutter_ci.yml` para añadir esos pasos.
+
 ### Widgets importantes
 - `SelectWithLoadingWidget<T>` (en `presentation/widgets/select_with_loading_widget.dart`): componente genérico que consume un `FutureProvider` y muestra DropdownButtonFormField con loading/error.
 
