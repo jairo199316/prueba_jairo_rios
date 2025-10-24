@@ -29,6 +29,21 @@ Patrón de estado y dependencias:
 - `usersListVersionProvider` (StateProvider) — usado como señal para invalidar/recargar la lista de usuarios.
 - `saveUserFutureProvider(user)` — guarda un usuario (usado por `FormScreen`).
 
+### Consumo de servicios (país / estado / ciudad)
+
+La carga de direcciones en la app se realiza consumiendo tres recursos/servicios separados en la capa de datos: uno para países, otro para estados y otro para ciudades. Cada uno de estos endpoints es consultado por un `FutureProvider` diferente y se mapea a la UI mediante providers en la capa de presentación:
+
+- `countriesFutureProvider` realiza la petición para obtener la lista de países.
+- `statesFutureProvider(country)` (provider *family*) obtiene los estados correspondientes a un país seleccionado.
+- `citiesFutureProvider({ 'country': ..., 'state': ... })` (provider *family*) obtiene las ciudades para el par país/estado seleccionado.
+
+En el código existe una constante `baseUrl` y rutas relacionadas en `lib/core/strings_constants.dart` que indican los endpoints usados para estos recursos (`countriesUrl`, `statesUrl`, `citiesUrl`).
+
+Comportamiento y notas prácticas:
+- Cada provider devuelve un `Either<Failure, Response>`; en UI los widgets consumen ese resultado y muestran un `CircularProgressIndicator` mientras cargan, el dropdown con los resultados al completar, o un mensaje de error si falla.
+- Los providers de estados/ciudades están implementados como *family* para poder parametrizarlos por país o por el par (país, estado).
+- En los tests, estos providers se reemplazan mediante `ProviderScope(overrides: [...])` y se devuelven respuestas deterministas (por ejemplo `Right(CountriesResponse(...))`) para mantener las pruebas aisladas y rápidas.
+
 ### Widgets importantes
 - `SelectWithLoadingWidget<T>` (en `presentation/widgets/select_with_loading_widget.dart`): componente genérico que consume un `FutureProvider` y muestra DropdownButtonFormField con loading/error.
 
