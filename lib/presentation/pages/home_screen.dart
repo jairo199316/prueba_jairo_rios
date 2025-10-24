@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:prueba_jairo_rios/core/size_constans.dart';
 import 'package:prueba_jairo_rios/core/strings_constants.dart';
 import 'package:prueba_jairo_rios/presentation/provider/user_provider.dart';
 import 'package:prueba_jairo_rios/presentation/route/string_rout_names.dart';
@@ -27,14 +28,14 @@ class HomeScreen extends ConsumerWidget {
             label: const Text(StringConstants.homeScreenAddUser),
           ),
           const SizedBox(
-            height: 8,
+            height: SizeConstants.size8,
           ),
           Expanded(
             child: usersAsync.when(
               data: (users) => Padding(
                 padding: const EdgeInsets.only(
-                  left: 8,
-                  right: 8,
+                  left: SizeConstants.size8,
+                  right: SizeConstants.size8,
                 ),
                 child: ListView.builder(
                   itemCount: users.length,
@@ -61,7 +62,7 @@ class HomeScreen extends ConsumerWidget {
                             ),
                           ),
                           const SizedBox(
-                            height: 8,
+                            height: SizeConstants.size8,
                           )
                         ],
                       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:prueba_jairo_rios/core/size_constans.dart';
 import 'package:prueba_jairo_rios/core/strings_constants.dart';
 import 'package:prueba_jairo_rios/domain/entities/user_information.dart';
 import 'package:prueba_jairo_rios/presentation/provider/user_provider.dart';
@@ -23,13 +24,13 @@ class DetailScreen extends ConsumerWidget {
           centerTitle: true,
         ),
         body: Padding(
-          padding: const EdgeInsets.only(left: 8.0, right: 8),
+          padding: const EdgeInsets.only(left: SizeConstants.size8, right: SizeConstants.size8),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
-                height: 16,
+                height: SizeConstants.size16,
               ),
               Card(
                 child: ListTile(
@@ -40,13 +41,13 @@ class DetailScreen extends ConsumerWidget {
                 ),
               ),
               const SizedBox(
-                height: 16,
+                height: SizeConstants.size16,
               ),
               const Text(
                 StringConstants.detailScreenAddressTitle,
               ),
               const SizedBox(
-                height: 16,
+                height: SizeConstants.size16,
               ),
               Expanded(
                   child: ListView.separated(
@@ -55,7 +56,7 @@ class DetailScreen extends ConsumerWidget {
                   final address = userInformation.addresses[i];
                   return Card(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.all(SizeConstants.size8),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,

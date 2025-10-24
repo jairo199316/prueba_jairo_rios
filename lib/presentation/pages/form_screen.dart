@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:prueba_jairo_rios/core/size_constans.dart';
 import 'package:prueba_jairo_rios/core/strings_constants.dart';
 import 'package:prueba_jairo_rios/domain/entities/address_information.dart';
 import 'package:prueba_jairo_rios/domain/entities/user_information.dart';
@@ -69,7 +70,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(SizeConstants.size16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -80,7 +81,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: SizeConstants.size12),
             TextField(
               controller: _lastNameController,
               decoration: const InputDecoration(
@@ -88,7 +89,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
                 border: OutlineInputBorder(),
               ),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: SizeConstants.size12),
             GestureDetector(
               onTap: () => _selectDate(context),
               child: AbsorbPointer(
@@ -102,7 +103,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: SizeConstants.size24),
             GenericDropdown<String>(
               provider: countriesFutureProvider,
               hint: StringConstants.formScreenSelectCountry,
@@ -119,7 +120,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
                 }
               },
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: SizeConstants.size16),
             if (_countrySelect != null && _countrySelect!.isNotEmpty)
               GenericDropdown<String>(
                 provider: statesFutureProvider(_countrySelect ?? ''),
@@ -155,10 +156,10 @@ class _FormScreenState extends ConsumerState<FormScreen> {
                   }
                 },
               ),
-            const SizedBox(height: 24),
+            const SizedBox(height: SizeConstants.size24),
             Wrap(
-              spacing: 8,
-              runSpacing: 8,
+              spacing: SizeConstants.size8,
+              runSpacing: SizeConstants.size8,
               alignment: WrapAlignment.center,
               children: [
                 OutlinedButton.icon(
@@ -225,7 +226,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
                   icon: const Icon(Icons.save_alt),
                   label: const Text(StringConstants.formScreenSaveUserData),
                   style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 48),
+                    minimumSize: const Size(double.infinity, SizeConstants.size48),
                   ),
                 ),
                 TextButton.icon(
