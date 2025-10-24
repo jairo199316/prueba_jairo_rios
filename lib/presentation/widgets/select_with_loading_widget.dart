@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartz/dartz.dart';
 import 'package:prueba_jairo_rios/core/strings_constants.dart';
+import 'package:prueba_jairo_rios/presentation/widgets/text_widget.dart';
 
-class GenericDropdown<T> extends ConsumerWidget {
+class SelectWithLoadingWidget<T> extends ConsumerWidget {
   final FutureProvider provider;
   final String hint;
   final String Function(T item) labelBuilder;
@@ -11,7 +12,7 @@ class GenericDropdown<T> extends ConsumerWidget {
   final void Function(T? value)? onChanged;
   final T? value;
 
-  const GenericDropdown({
+  const SelectWithLoadingWidget({
     super.key,
     required this.provider,
     required this.hint,
@@ -40,7 +41,7 @@ class GenericDropdown<T> extends ConsumerWidget {
           width: double.infinity,
           child: DropdownButtonFormField<T>(
             isExpanded: true,
-            hint: Text(hint),
+            hint: TextWidget(text: hint),
             items: items
                 .toSet()
                 .map((item) => DropdownMenuItem<T>(
@@ -58,7 +59,7 @@ class GenericDropdown<T> extends ConsumerWidget {
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, _) => Text('${StringConstants.error} $err'),
+      error: (err, _) => TextWidget(text: '${StringConstants.error} $err'),
     );
   }
 }

@@ -5,6 +5,8 @@ import 'package:prueba_jairo_rios/core/size_constans.dart';
 import 'package:prueba_jairo_rios/core/strings_constants.dart';
 import 'package:prueba_jairo_rios/presentation/provider/user_provider.dart';
 import 'package:prueba_jairo_rios/presentation/route/string_rout_names.dart';
+import 'package:prueba_jairo_rios/presentation/widgets/card_user_information_widget.dart';
+import 'package:prueba_jairo_rios/presentation/widgets/text_widget.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -15,7 +17,11 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(StringConstants.homeScreenTitle),
+        title: const TextWidget(
+          text: StringConstants.homeScreenTitle,
+          fontWeight: FontWeight.bold,
+          fontSize: SizeConstants.size22,
+        ),
         centerTitle: true,
       ),
       body: Column(
@@ -25,7 +31,7 @@ class HomeScreen extends ConsumerWidget {
               context.push(StringRoutNames.formScreen);
             },
             icon: const Icon(Icons.person_add_alt_1),
-            label: const Text(StringConstants.homeScreenAddUser),
+            label: const TextWidget(text: StringConstants.homeScreenAddUser),
           ),
           const SizedBox(
             height: SizeConstants.size8,
@@ -53,14 +59,11 @@ class HomeScreen extends ConsumerWidget {
                       },
                       child: Column(
                         children: [
-                          Card(
-                            child: ListTile(
-                              title: Text(
-                                  '${StringConstants.formScreenNameField}: ${user.name} ${user.lastName}'),
-                              subtitle: Text(
+                          CardUserInformationWidget(
+                              title:
+                                  '${StringConstants.formScreenNameField}: ${user.name} ${user.lastName}',
+                              subtitle:
                                   '${StringConstants.formScreenBirthdayField}: ${user.birthday}'),
-                            ),
-                          ),
                           const SizedBox(
                             height: SizeConstants.size8,
                           )
@@ -71,8 +74,8 @@ class HomeScreen extends ConsumerWidget {
                 ),
               ),
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, _) =>
-                  Center(child: Text('${StringConstants.error} $err')),
+              error: (err, _) => Center(
+                  child: TextWidget(text: '${StringConstants.error} $err')),
             ),
           ),
         ],

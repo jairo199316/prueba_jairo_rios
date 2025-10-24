@@ -8,7 +8,8 @@ import 'package:prueba_jairo_rios/domain/entities/user_information.dart';
 import 'package:prueba_jairo_rios/presentation/provider/country_information_provider.dart';
 import 'package:prueba_jairo_rios/presentation/provider/user_provider.dart';
 import 'package:prueba_jairo_rios/presentation/route/string_rout_names.dart';
-import 'package:prueba_jairo_rios/presentation/widgets/select_with_loading.dart';
+import 'package:prueba_jairo_rios/presentation/widgets/select_with_loading_widget.dart';
+import 'package:prueba_jairo_rios/presentation/widgets/text_widget.dart';
 
 class FormScreen extends ConsumerStatefulWidget {
   const FormScreen({super.key});
@@ -55,7 +56,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
       {Color color = Colors.blue}) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(message),
+        content: TextWidget(text: message),
         backgroundColor: color,
         behavior: SnackBarBehavior.floating,
       ),
@@ -66,7 +67,11 @@ class _FormScreenState extends ConsumerState<FormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(StringConstants.formScreenTitle),
+        title: const TextWidget(
+          text: StringConstants.formScreenTitle,
+          fontWeight: FontWeight.bold,
+          fontSize: SizeConstants.size22,
+        ),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -104,7 +109,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
               ),
             ),
             const SizedBox(height: SizeConstants.size24),
-            GenericDropdown<String>(
+            SelectWithLoadingWidget<String>(
               provider: countriesFutureProvider,
               hint: StringConstants.formScreenSelectCountry,
               itemsExtractor: (response) => response?.countries ?? [],
@@ -122,7 +127,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
             ),
             const SizedBox(height: SizeConstants.size16),
             if (_countrySelect != null && _countrySelect!.isNotEmpty)
-              GenericDropdown<String>(
+              SelectWithLoadingWidget<String>(
                 provider: statesFutureProvider(_countrySelect ?? ''),
                 hint: StringConstants.formScreenSelectState,
                 itemsExtractor: (response) => response?.states ?? [],
@@ -137,9 +142,9 @@ class _FormScreenState extends ConsumerState<FormScreen> {
                   }
                 },
               ),
-            const SizedBox(height: 16),
+            const SizedBox(height: SizeConstants.size16),
             if (_stateSelect != null && _stateSelect!.isNotEmpty)
-              GenericDropdown<String>(
+              SelectWithLoadingWidget<String>(
                 provider: citiesFutureProvider({
                   'country': _countrySelect,
                   'state': _stateSelect,
@@ -164,93 +169,114 @@ class _FormScreenState extends ConsumerState<FormScreen> {
               children: [
                 OutlinedButton.icon(
                   onPressed: () async {
-                    if (_countrySelect == null ||
-                        _stateSelect == null ||
-                        _citySelect == null) {
-                      _showSnackBar(context,
-                          StringConstants.formScreenCountryStateCityRequired,
-                          color: Colors.orange);
-                      return;
-                    }
-
-                    address.add(AddressInformation(
-                      countryName: _countrySelect ?? '',
-                      stateName: _stateSelect ?? '',
-                      cityName: _citySelect ?? '',
-                    ));
-
-                    _showSnackBar(
-                        context, StringConstants.formScreenAddressAdded);
+                    await addAddress();
                   },
                   icon: const Icon(Icons.add_location_alt_outlined),
-                  label: const Text(StringConstants.formScreenAddAddress),
+                  label: const TextWidget(
+                      text: StringConstants.formScreenAddAddress),
                 ),
                 ElevatedButton.icon(
                   onPressed: () async {
-                    if (_nameController.text.isEmpty ||
-                        _lastNameController.text.isEmpty ||
-                        _birthdayController.text.isEmpty) {
-                      _showSnackBar(
-                        context,
-                        StringConstants.formScreenDataRequired,
-                        color: Colors.redAccent,
-                      );
-                      return;
-                    }
-
-                    final user = UserInformation(
-                      addresses: address,
-                      name: _nameController.text,
-                      lastName: _lastNameController.text,
-                      birthday: _birthdayController.text,
-                    );
-
-                    showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (_) =>
-                          const Center(child: CircularProgressIndicator()),
-                    );
-
-                    await ref.read(saveUserFutureProvider(user).future);
-                    ref.read(usersListVersionProvider.notifier).state++;
-
-                    if (context.mounted) Navigator.pop(context);
-
-                    _showSnackBar(
-                      context,
-                      StringConstants.formScreenSuccessMessage,
-                      color: Colors.green,
-                    );
+                    await addUser(context, ref);
                   },
                   icon: const Icon(Icons.save_alt),
-                  label: const Text(StringConstants.formScreenSaveUserData),
+                  label: const TextWidget(
+                      text: StringConstants.formScreenSaveUserData),
                   style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, SizeConstants.size48),
+                    minimumSize:
+                        const Size(double.infinity, SizeConstants.size48),
                   ),
                 ),
                 TextButton.icon(
                   onPressed: () {
-                    if (address.isEmpty) {
-                      _showSnackBar(
-                          context, StringConstants.formScreenAddressEmpty,
-                          color: Colors.orange);
-                      return;
-                    }
-
-                    context.push(
-                      StringRoutNames.userAddressScreen,
-                      extra: address,
-                    );
+                    goToViewAddress(context);
                   },
                   icon: const Icon(Icons.list_alt_outlined),
-                  label: const Text(StringConstants.formScreenViewAddress),
+                  label: const TextWidget(
+                      text: StringConstants.formScreenViewAddress),
                 ),
               ],
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> addAddress() async {
+    if (_countrySelect == null || _stateSelect == null || _citySelect == null) {
+      _showSnackBar(context, StringConstants.formScreenCountryStateCityRequired,
+          color: Colors.orange);
+      return;
+    }
+
+    address.add(AddressInformation(
+      countryName: _countrySelect ?? '',
+      stateName: _stateSelect ?? '',
+      cityName: _citySelect ?? '',
+    ));
+
+    _showSnackBar(context, StringConstants.formScreenAddressAdded);
+  }
+
+  Future<void> addUser(BuildContext context, WidgetRef ref) async {
+    if (_nameController.text.isEmpty ||
+        _lastNameController.text.isEmpty ||
+        _birthdayController.text.isEmpty) {
+      _showSnackBar(
+        context,
+        StringConstants.formScreenDataRequired,
+        color: Colors.redAccent,
+      );
+      return;
+    }
+
+    final user = UserInformation(
+      addresses: address,
+      name: _nameController.text,
+      lastName: _lastNameController.text,
+      birthday: _birthdayController.text,
+    );
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => const Center(child: CircularProgressIndicator()),
+    );
+
+    await ref.read(saveUserFutureProvider(user).future);
+    ref.read(usersListVersionProvider.notifier).state++;
+
+    if (context.mounted) Navigator.pop(context);
+
+    setState(() {
+      _nameController.text = "";
+      _lastNameController.text = "";
+      _birthdayController.text = "";
+
+      _countrySelect = null;
+      _stateSelect = null;
+      _citySelect = null;
+      address = [];
+    });
+
+    _showSnackBar(
+      context,
+      StringConstants.formScreenSuccessMessage,
+      color: Colors.green,
+    );
+  }
+
+  void goToViewAddress(BuildContext context) {
+    if (address.isEmpty) {
+      _showSnackBar(context, StringConstants.formScreenAddressEmpty,
+          color: Colors.orange);
+      return;
+    }
+
+    context.push(
+      StringRoutNames.userAddressScreen,
+      extra: address,
     );
   }
 }
