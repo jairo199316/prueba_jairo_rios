@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:prueba_jairo_rios/domain/entities/address_information.dart';
 import 'package:prueba_jairo_rios/domain/entities/user_information.dart';
 import 'package:prueba_jairo_rios/presentation/provider/country_information_provider.dart';
 import 'package:prueba_jairo_rios/presentation/provider/user_provider.dart';
+import 'package:prueba_jairo_rios/presentation/route/string_rout_names.dart';
 import 'package:prueba_jairo_rios/presentation/widgets/select_with_loading.dart';
 
 class FormScreen extends ConsumerStatefulWidget {
@@ -21,6 +23,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
   String? _countrySelect;
   String? _stateSelect;
   String? _citySelect;
+  List<AddressInformation> address = [];
 
   @override
   void dispose() {
@@ -46,6 +49,17 @@ class _FormScreenState extends ConsumerState<FormScreen> {
     }
   }
 
+  void _showSnackBar(BuildContext context, String message,
+      {Color color = Colors.blue}) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: color,
+        behavior: SnackBarBehavior.floating,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,6 +69,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
               controller: _nameController,
@@ -86,6 +101,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
               ),
             ),
             const SizedBox(height: 24),
+
             GenericDropdown<String>(
               provider: countriesFutureProvider,
               hint: 'Selecciona un país',
@@ -102,6 +118,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
               },
             ),
             const SizedBox(height: 16),
+
             if (_countrySelect != null && _countrySelect!.isNotEmpty)
               GenericDropdown<String>(
                 provider: statesFutureProvider(_countrySelect ?? ""),
@@ -118,6 +135,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
                 },
               ),
             const SizedBox(height: 16),
+
             if (_stateSelect != null && _stateSelect!.isNotEmpty)
               GenericDropdown<String>(
                 provider: citiesFutureProvider({
@@ -132,21 +150,94 @@ class _FormScreenState extends ConsumerState<FormScreen> {
                 },
               ),
             const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: () async {
-                final user = UserInformation(
-                    addresses: [
-                      AddressInformation(
-                          countryName: _countrySelect ?? "",
-                          stateName: _stateSelect ?? "",
-                          cityName: _citySelect ?? "")
-                    ],
-                    name: _nameController.text,
-                    lastName: _lastNameController.text,
-                    birthday: _birthdayController.text);
-                await ref.read(saveUserFutureProvider(user).future);
-              },
-              child: const Text('Guardar usuario'),
+
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              alignment: WrapAlignment.center,
+              children: [
+                OutlinedButton.icon(
+                  onPressed: () async {
+                    if (_countrySelect == null ||
+                        _stateSelect == null ||
+                        _citySelect == null) {
+                      _showSnackBar(context,
+                          'Selecciona país, estado y ciudad antes de agregar una dirección',
+                          color: Colors.orange);
+                      return;
+                    }
+
+                    address.add(AddressInformation(
+                      countryName: _countrySelect ?? "",
+                      stateName: _stateSelect ?? "",
+                      cityName: _citySelect ?? "",
+                    ));
+
+                    _showSnackBar(context, 'Dirección agregada correctamente');
+                  },
+                  icon: const Icon(Icons.add_location_alt_outlined),
+                  label: const Text('Agregar dirección'),
+                ),
+                ElevatedButton.icon(
+                  onPressed: () async {
+                    if (_nameController.text.isEmpty ||
+                        _lastNameController.text.isEmpty ||
+                        _birthdayController.text.isEmpty) {
+                      _showSnackBar(
+                        context,
+                        'Por favor completa todos los campos obligatorios',
+                        color: Colors.redAccent,
+                      );
+                      return;
+                    }
+
+                    final user = UserInformation(
+                      addresses: address,
+                      name: _nameController.text,
+                      lastName: _lastNameController.text,
+                      birthday: _birthdayController.text,
+                    );
+
+                    showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (_) =>
+                          const Center(child: CircularProgressIndicator()),
+                    );
+
+                    await ref.read(saveUserFutureProvider(user).future);
+
+                    if (context.mounted) Navigator.pop(context);
+
+                    _showSnackBar(
+                      context,
+                      'Usuario guardado exitosamente',
+                      color: Colors.green,
+                    );
+                  },
+                  icon: const Icon(Icons.save_alt),
+                  label: const Text('Guardar usuario'),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(double.infinity, 48),
+                  ),
+                ),
+                TextButton.icon(
+                  onPressed: () {
+                    if (address.isEmpty) {
+                      _showSnackBar(context, 'No hay direcciones agregadas',
+                          color: Colors.orange);
+                      return;
+                    }
+
+                    context.push(
+                      StringRoutNames.userAddressScreen,
+                      extra: address,
+                    );
+                  },
+                  icon: const Icon(Icons.list_alt_outlined),
+                  label: const Text('Ver direcciones agregadas'),
+                ),
+              ],
             ),
           ],
         ),

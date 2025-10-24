@@ -31,10 +31,13 @@ class HomeScreen extends ConsumerWidget {
                     itemBuilder: (_, i) {
                       final user = users[i];
                       return InkWell(
-                        onTap: (){
+                        onTap: () {
                           context.push(
                             StringRoutNames.detailScreen,
-                            extra: user,
+                            extra: {
+                              'user': user,
+                              'index': i,
+                            },
                           );
                         },
                         child: ListTile(

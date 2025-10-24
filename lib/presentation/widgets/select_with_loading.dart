@@ -8,6 +8,7 @@ class GenericDropdown<T> extends ConsumerWidget {
   final String Function(T item) labelBuilder;
   final List<T> Function(dynamic data) itemsExtractor;
   final void Function(T? value)? onChanged;
+  final T? value;
 
   const GenericDropdown({
     super.key,
@@ -16,6 +17,7 @@ class GenericDropdown<T> extends ConsumerWidget {
     required this.labelBuilder,
     required this.itemsExtractor,
     this.onChanged,
+    this.value,
   });
 
   @override
@@ -49,6 +51,7 @@ class GenericDropdown<T> extends ConsumerWidget {
                       ),
                     ))
                 .toList(),
+            value: value,
             onChanged: onChanged,
           ),
         );

@@ -18,7 +18,11 @@ final saveUserFutureProvider =
   return await useCase.saveUser(user);
 });
 
-final getUsersFutureProvider = FutureProvider((ref) async {
+final usersListVersionProvider = StateProvider((ref) => 0);
+
+final getUsersFutureProvider = FutureProvider.autoDispose((ref) async {
+  ref.watch(usersListVersionProvider);
+  
   final repo = await ref.watch(userRepositoryProvider.future);
   final useCase = GetUsersUseCase(userRepository: repo);
   return await useCase.getUsers();
