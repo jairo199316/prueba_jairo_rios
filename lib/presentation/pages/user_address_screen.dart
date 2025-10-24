@@ -12,6 +12,7 @@ class UserAddressScreen extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: const Text(StringConstants.userAddressScreenTitle),
+          centerTitle: true,
         ),
         body: Column(
           children: [

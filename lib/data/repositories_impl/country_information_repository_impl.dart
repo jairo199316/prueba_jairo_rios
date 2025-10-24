@@ -25,11 +25,12 @@ class CountryInformationRepositoryImpl implements CountryInformationRepository {
       } else {
         return Left(
           Failure(
-              message: '$StringConstants.getDataError: ${response.statusCode}'),
+              message:
+                  '${StringConstants.getDataError}: ${response.statusCode}'),
         );
       }
     } catch (e) {
-      return Left(Failure(message: '$StringConstants.error: $e'));
+      return Left(Failure(message: '${StringConstants.error}: $e'));
     }
   }
 
@@ -52,11 +53,12 @@ class CountryInformationRepositoryImpl implements CountryInformationRepository {
       } else {
         return Left(
           Failure(
-              message: '$StringConstants.getDataError: ${response.statusCode}'),
+              message:
+                  '${StringConstants.getDataError}: ${response.statusCode}'),
         );
       }
     } catch (e) {
-      return Left(Failure(message: '$StringConstants.error: $e'));
+      return Left(Failure(message: '${StringConstants.error}: $e'));
     }
   }
 
@@ -79,11 +81,12 @@ class CountryInformationRepositoryImpl implements CountryInformationRepository {
       } else {
         return Left(
           Failure(
-              message: '$StringConstants.getDataError: ${response.statusCode}'),
+              message:
+                  '${StringConstants.getDataError}: ${response.statusCode}'),
         );
       }
     } catch (e) {
-      return Left(Failure(message: '$StringConstants.error: $e'));
+      return Left(Failure(message: '${StringConstants.error}: $e'));
     }
   }
 }

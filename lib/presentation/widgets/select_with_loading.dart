@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:dartz/dartz.dart';
+import 'package:prueba_jairo_rios/core/strings_constants.dart';
 
 class GenericDropdown<T> extends ConsumerWidget {
   final FutureProvider provider;
@@ -57,7 +58,7 @@ class GenericDropdown<T> extends ConsumerWidget {
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (err, _) => Text('Error: $err'),
+      error: (err, _) => Text('${StringConstants.error} $err'),
     );
   }
 }

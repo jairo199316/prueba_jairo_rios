@@ -66,6 +66,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(StringConstants.formScreenTitle),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),

@@ -20,6 +20,14 @@ class StringConstants {
   static const String detailScreenDeleteUserDelete = 'Eliminar';
   static const String detailScreenDeleteUserDeleteMessage =
       'Usuario eliminado exitosamente';
+  static const String detailScreenAddressTitle =
+      'Direcciones registradas';
+  static const String detailScreenCountryName =
+      'Pais';
+  static const String detailScreenStateName =
+      'Estado';
+  static const String detailScreenCityName =
+      'Ciudad';
 
   //Strings form_screen.dart
   static const String formScreenTitle = 'Registrar usuario';

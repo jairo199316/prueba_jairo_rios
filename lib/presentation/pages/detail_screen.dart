@@ -22,41 +22,60 @@ class DetailScreen extends ConsumerWidget {
           title: const Text(StringConstants.detailScreenTitle),
           centerTitle: true,
         ),
-        body: Center(
+        body: Padding(
+          padding: const EdgeInsets.only(left: 8.0, right: 8),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(
                 height: 16,
               ),
-              Text(
-                userInformation.name,
+              Card(
+                child: ListTile(
+                  title: Text(
+                      '${StringConstants.formScreenNameField}: ${userInformation.name} ${userInformation.lastName}'),
+                  subtitle: Text(
+                      '${StringConstants.formScreenBirthdayField}: ${userInformation.birthday}'),
+                ),
               ),
-              Text(
-                userInformation.lastName,
+              const SizedBox(
+                height: 16,
               ),
-              Text(
-                userInformation.birthday,
+              const Text(
+                StringConstants.detailScreenAddressTitle,
+              ),
+              const SizedBox(
+                height: 16,
               ),
               Expanded(
-                  child: ListView.builder(
+                  child: ListView.separated(
                 itemCount: userInformation.addresses.length,
                 itemBuilder: (_, i) {
                   final address = userInformation.addresses[i];
-                  return Column(
-                    children: [
-                      const Text('---------'),
-                      Text(
-                        address.countryName,
+                  return Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${StringConstants.detailScreenCountryName}: ${address.countryName}',
+                          ),
+                          Text(
+                            '${StringConstants.detailScreenStateName}: ${address.stateName}',
+                          ),
+                          Text(
+                            '${StringConstants.detailScreenCityName}: ${address.cityName}',
+                          ),
+                        ],
                       ),
-                      Text(
-                        address.stateName,
-                      ),
-                      Text(
-                        address.cityName,
-                      ),
-                      const Text('---------'),
-                    ],
+                    ),
                   );
+                },
+                separatorBuilder: (BuildContext context, int index) {
+                  return const Divider();
                 },
               )),
             ],

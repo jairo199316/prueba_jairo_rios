@@ -15,41 +15,63 @@ class HomeScreen extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(StringConstants.homeScreenTitle),
+        centerTitle: true,
       ),
       body: Column(
         children: [
-          ElevatedButton(
+          ElevatedButton.icon(
             onPressed: () {
               context.push(StringRoutNames.formScreen);
             },
-            child: const Text(StringConstants.homeScreenAddUser),
+            icon: const Icon(Icons.person_add_alt_1),
+            label: const Text(StringConstants.homeScreenAddUser),
+          ),
+          const SizedBox(
+            height: 8,
           ),
           Expanded(
             child: usersAsync.when(
-              data: (users) => ListView.builder(
-                itemCount: users.length,
-                itemBuilder: (_, i) {
-                  final user = users[i];
-                  return InkWell(
-                    onTap: () {
-                      context.push(
-                        StringRoutNames.detailScreen,
-                        extra: {
-                          'user': user,
-                          'index': i,
-                        },
-                      );
-                    },
-                    child: ListTile(
-                      title: Text('${user.name} ${user.lastName}'),
-                      subtitle: Text(user.birthday),
-                    ),
-                  );
-                },
+              data: (users) => Padding(
+                padding: const EdgeInsets.only(
+                  left: 8,
+                  right: 8,
+                ),
+                child: ListView.builder(
+                  itemCount: users.length,
+                  itemBuilder: (_, i) {
+                    final user = users[i];
+                    return InkWell(
+                      onTap: () {
+                        context.push(
+                          StringRoutNames.detailScreen,
+                          extra: {
+                            'user': user,
+                            'index': i,
+                          },
+                        );
+                      },
+                      child: Column(
+                        children: [
+                          Card(
+                            child: ListTile(
+                              title: Text(
+                                  '${StringConstants.formScreenNameField}: ${user.name} ${user.lastName}'),
+                              subtitle: Text(
+                                  '${StringConstants.formScreenBirthdayField}: ${user.birthday}'),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (err, _) =>
-                  Center(child: Text('$StringConstants.error $err')),
+                  Center(child: Text('${StringConstants.error} $err')),
             ),
           ),
         ],
