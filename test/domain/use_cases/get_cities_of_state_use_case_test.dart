@@ -20,7 +20,7 @@ void main() {
       when(() => repository.getCitiesOfState(any(), any()))
           .thenAnswer((_) async => const Right(CitiesResponse(cities: [])));
 
-      await useCase.getCitiesOfState("", "");
+      await useCase.getCitiesOfState('Colombia', 'Antioquia');
 
       verify(() => repository.getCitiesOfState(any(), any())).called(1);
     });

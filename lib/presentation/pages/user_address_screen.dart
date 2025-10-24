@@ -16,7 +16,7 @@ class UserAddressScreen extends StatelessWidget {
           children: [
             if (addresses.isEmpty) ...[
               const Center(
-                child: Text("No hay direcciones"),
+                child: Text('No hay direcciones'),
               ),
             ] else ...[
               Expanded(
@@ -26,7 +26,7 @@ class UserAddressScreen extends StatelessWidget {
                   final address = addresses[i];
                   return Column(
                     children: [
-                      const Text("---------"),
+                      const Text('---------'),
                       Text(
                         address.countryName,
                       ),
@@ -36,7 +36,7 @@ class UserAddressScreen extends StatelessWidget {
                       Text(
                         address.cityName,
                       ),
-                      const Text("---------"),
+                      const Text('---------'),
                     ],
                   );
                 },

@@ -18,12 +18,12 @@ void main() {
 
   group('GetStatesOfCountryUseCase', () {
     test('getCountries OK', () async {
-      when(() => repository.getStatesOfCountry(""))
+      when(() => repository.getStatesOfCountry(any()))
           .thenAnswer((_) async => const Right(StatesResponse(states: [])));
 
-      await useCase.getStatesOfCountry("");
+      await useCase.getStatesOfCountry('Colombia');
 
-      verify(() => repository.getStatesOfCountry("")).called(1);
+      verify(() => repository.getStatesOfCountry(any())).called(1);
     });
   });
 }

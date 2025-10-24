@@ -44,7 +44,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
     if (pickedDate != null) {
       setState(() {
         _birthdayController.text =
-            "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+            '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}';
       });
     }
   }
@@ -121,7 +121,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
 
             if (_countrySelect != null && _countrySelect!.isNotEmpty)
               GenericDropdown<String>(
-                provider: statesFutureProvider(_countrySelect ?? ""),
+                provider: statesFutureProvider(_countrySelect ?? ''),
                 hint: 'Selecciona un estado',
                 itemsExtractor: (response) => response?.states ?? [],
                 labelBuilder: (state) => state,
@@ -139,8 +139,8 @@ class _FormScreenState extends ConsumerState<FormScreen> {
             if (_stateSelect != null && _stateSelect!.isNotEmpty)
               GenericDropdown<String>(
                 provider: citiesFutureProvider({
-                  "country": _countrySelect,
-                  "state": _stateSelect,
+                  'country': _countrySelect,
+                  'state': _stateSelect,
                 }),
                 hint: 'Selecciona una ciudad',
                 itemsExtractor: (response) => response?.cities ?? [],
@@ -168,9 +168,9 @@ class _FormScreenState extends ConsumerState<FormScreen> {
                     }
 
                     address.add(AddressInformation(
-                      countryName: _countrySelect ?? "",
-                      stateName: _stateSelect ?? "",
-                      cityName: _citySelect ?? "",
+                      countryName: _countrySelect ?? '',
+                      stateName: _stateSelect ?? '',
+                      cityName: _citySelect ?? '',
                     ));
 
                     _showSnackBar(context, 'Dirección agregada correctamente');

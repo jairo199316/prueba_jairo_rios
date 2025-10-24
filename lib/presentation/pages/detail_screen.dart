@@ -43,7 +43,7 @@ class DetailScreen extends ConsumerWidget {
                   final address = userInformation.addresses[i];
                   return Column(
                     children: [
-                      const Text("---------"),
+                      const Text('---------'),
                       Text(
                         address.countryName,
                       ),
@@ -53,7 +53,7 @@ class DetailScreen extends ConsumerWidget {
                       Text(
                         address.cityName,
                       ),
-                      const Text("---------"),
+                      const Text('---------'),
                     ],
                   );
                 },
