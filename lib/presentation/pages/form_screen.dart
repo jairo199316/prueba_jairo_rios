@@ -107,6 +107,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
               hint: StringConstants.formScreenSelectCountry,
               itemsExtractor: (response) => response?.countries ?? [],
               labelBuilder: (country) => country,
+              value: _countrySelect,
               onChanged: (value) {
                 if (value != _countrySelect) {
                   setState(() {
@@ -124,6 +125,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
                 hint: StringConstants.formScreenSelectState,
                 itemsExtractor: (response) => response?.states ?? [],
                 labelBuilder: (state) => state,
+                value: _stateSelect,
                 onChanged: (value) {
                   if (value != _stateSelect) {
                     setState(() {
@@ -143,8 +145,13 @@ class _FormScreenState extends ConsumerState<FormScreen> {
                 hint: StringConstants.formScreenSelectCity,
                 itemsExtractor: (response) => response?.cities ?? [],
                 labelBuilder: (city) => city,
+                value: _citySelect,
                 onChanged: (value) {
-                  _citySelect = value;
+                  if (value != _citySelect) {
+                    setState(() {
+                      _citySelect = value;
+                    });
+                  }
                 },
               ),
             const SizedBox(height: 24),
@@ -204,6 +211,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
                     );
 
                     await ref.read(saveUserFutureProvider(user).future);
+                    ref.read(usersListVersionProvider.notifier).state++;
 
                     if (context.mounted) Navigator.pop(context);
 
