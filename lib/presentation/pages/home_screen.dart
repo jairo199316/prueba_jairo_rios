@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:prueba_jairo_rios/core/strings_constants.dart';
 import 'package:prueba_jairo_rios/presentation/provider/user_provider.dart';
 import 'package:prueba_jairo_rios/presentation/route/string_rout_names.dart';
 
@@ -13,7 +14,7 @@ class HomeScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lista de usuarios'),
+        title: const Text(StringConstants.homeScreenTitle),
       ),
       body: Column(
         children: [
@@ -21,34 +22,34 @@ class HomeScreen extends ConsumerWidget {
             onPressed: () {
               context.push(StringRoutNames.formScreen);
             },
-            child: const Text('Registrar usuario'),
+            child: const Text(StringConstants.homeScreenAddUser),
           ),
           Expanded(
             child: usersAsync.when(
-              data: (users) =>
-                  ListView.builder(
-                    itemCount: users.length,
-                    itemBuilder: (_, i) {
-                      final user = users[i];
-                      return InkWell(
-                        onTap: () {
-                          context.push(
-                            StringRoutNames.detailScreen,
-                            extra: {
-                              'user': user,
-                              'index': i,
-                            },
-                          );
+              data: (users) => ListView.builder(
+                itemCount: users.length,
+                itemBuilder: (_, i) {
+                  final user = users[i];
+                  return InkWell(
+                    onTap: () {
+                      context.push(
+                        StringRoutNames.detailScreen,
+                        extra: {
+                          'user': user,
+                          'index': i,
                         },
-                        child: ListTile(
-                          title: Text('${user.name} ${user.lastName}'),
-                          subtitle: Text(user.birthday),
-                        ),
                       );
                     },
-                  ),
+                    child: ListTile(
+                      title: Text('${user.name} ${user.lastName}'),
+                      subtitle: Text(user.birthday),
+                    ),
+                  );
+                },
+              ),
               loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, _) => Center(child: Text('Error: $err')),
+              error: (err, _) =>
+                  Center(child: Text('$StringConstants.error $err')),
             ),
           ),
         ],

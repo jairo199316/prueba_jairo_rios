@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:prueba_jairo_rios/core/strings_constants.dart';
 import 'package:prueba_jairo_rios/domain/entities/address_information.dart';
 
 class UserAddressScreen extends StatelessWidget {
@@ -10,13 +11,13 @@ class UserAddressScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Direcciones del usuario'),
+          title: const Text(StringConstants.userAddressScreenTitle),
         ),
         body: Column(
           children: [
             if (addresses.isEmpty) ...[
               const Center(
-                child: Text('No hay direcciones'),
+                child: Text(StringConstants.userAddressScreenNoAddresses),
               ),
             ] else ...[
               Expanded(

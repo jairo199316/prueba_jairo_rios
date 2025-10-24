@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:prueba_jairo_rios/core/strings_constants.dart';
 import 'package:prueba_jairo_rios/domain/entities/address_information.dart';
 import 'package:prueba_jairo_rios/domain/entities/user_information.dart';
 import 'package:prueba_jairo_rios/presentation/provider/country_information_provider.dart';
@@ -64,7 +65,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Registrar usuario'),
+        title: const Text(StringConstants.formScreenTitle),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -74,7 +75,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
             TextField(
               controller: _nameController,
               decoration: const InputDecoration(
-                labelText: 'Nombre',
+                labelText: StringConstants.formScreenNameField,
                 border: OutlineInputBorder(),
               ),
             ),
@@ -82,7 +83,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
             TextField(
               controller: _lastNameController,
               decoration: const InputDecoration(
-                labelText: 'Apellido',
+                labelText: StringConstants.formScreenLastNameField,
                 border: OutlineInputBorder(),
               ),
             ),
@@ -93,7 +94,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
                 child: TextField(
                   controller: _birthdayController,
                   decoration: const InputDecoration(
-                    labelText: 'Fecha de nacimiento',
+                    labelText: StringConstants.formScreenBirthdayField,
                     border: OutlineInputBorder(),
                     suffixIcon: Icon(Icons.calendar_today),
                   ),
@@ -101,10 +102,9 @@ class _FormScreenState extends ConsumerState<FormScreen> {
               ),
             ),
             const SizedBox(height: 24),
-
             GenericDropdown<String>(
               provider: countriesFutureProvider,
-              hint: 'Selecciona un país',
+              hint: StringConstants.formScreenSelectCountry,
               itemsExtractor: (response) => response?.countries ?? [],
               labelBuilder: (country) => country,
               onChanged: (value) {
@@ -118,11 +118,10 @@ class _FormScreenState extends ConsumerState<FormScreen> {
               },
             ),
             const SizedBox(height: 16),
-
             if (_countrySelect != null && _countrySelect!.isNotEmpty)
               GenericDropdown<String>(
                 provider: statesFutureProvider(_countrySelect ?? ''),
-                hint: 'Selecciona un estado',
+                hint: StringConstants.formScreenSelectState,
                 itemsExtractor: (response) => response?.states ?? [],
                 labelBuilder: (state) => state,
                 onChanged: (value) {
@@ -135,14 +134,13 @@ class _FormScreenState extends ConsumerState<FormScreen> {
                 },
               ),
             const SizedBox(height: 16),
-
             if (_stateSelect != null && _stateSelect!.isNotEmpty)
               GenericDropdown<String>(
                 provider: citiesFutureProvider({
                   'country': _countrySelect,
                   'state': _stateSelect,
                 }),
-                hint: 'Selecciona una ciudad',
+                hint: StringConstants.formScreenSelectCity,
                 itemsExtractor: (response) => response?.cities ?? [],
                 labelBuilder: (city) => city,
                 onChanged: (value) {
@@ -150,7 +148,6 @@ class _FormScreenState extends ConsumerState<FormScreen> {
                 },
               ),
             const SizedBox(height: 24),
-
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -162,7 +159,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
                         _stateSelect == null ||
                         _citySelect == null) {
                       _showSnackBar(context,
-                          'Selecciona país, estado y ciudad antes de agregar una dirección',
+                          StringConstants.formScreenCountryStateCityRequired,
                           color: Colors.orange);
                       return;
                     }
@@ -173,10 +170,11 @@ class _FormScreenState extends ConsumerState<FormScreen> {
                       cityName: _citySelect ?? '',
                     ));
 
-                    _showSnackBar(context, 'Dirección agregada correctamente');
+                    _showSnackBar(
+                        context, StringConstants.formScreenAddressAdded);
                   },
                   icon: const Icon(Icons.add_location_alt_outlined),
-                  label: const Text('Agregar dirección'),
+                  label: const Text(StringConstants.formScreenAddAddress),
                 ),
                 ElevatedButton.icon(
                   onPressed: () async {
@@ -185,7 +183,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
                         _birthdayController.text.isEmpty) {
                       _showSnackBar(
                         context,
-                        'Por favor completa todos los campos obligatorios',
+                        StringConstants.formScreenDataRequired,
                         color: Colors.redAccent,
                       );
                       return;
@@ -211,12 +209,12 @@ class _FormScreenState extends ConsumerState<FormScreen> {
 
                     _showSnackBar(
                       context,
-                      'Usuario guardado exitosamente',
+                      StringConstants.formScreenSuccessMessage,
                       color: Colors.green,
                     );
                   },
                   icon: const Icon(Icons.save_alt),
-                  label: const Text('Guardar usuario'),
+                  label: const Text(StringConstants.formScreenSaveUserData),
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size(double.infinity, 48),
                   ),
@@ -224,7 +222,8 @@ class _FormScreenState extends ConsumerState<FormScreen> {
                 TextButton.icon(
                   onPressed: () {
                     if (address.isEmpty) {
-                      _showSnackBar(context, 'No hay direcciones agregadas',
+                      _showSnackBar(
+                          context, StringConstants.formScreenAddressEmpty,
                           color: Colors.orange);
                       return;
                     }
@@ -235,7 +234,7 @@ class _FormScreenState extends ConsumerState<FormScreen> {
                     );
                   },
                   icon: const Icon(Icons.list_alt_outlined),
-                  label: const Text('Ver direcciones agregadas'),
+                  label: const Text(StringConstants.formScreenViewAddress),
                 ),
               ],
             ),

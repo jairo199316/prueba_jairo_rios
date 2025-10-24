@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 import 'package:prueba_jairo_rios/core/failure.dart';
+import 'package:prueba_jairo_rios/core/strings_constants.dart';
 import 'package:prueba_jairo_rios/domain/entities/cities_response.dart';
 import 'package:prueba_jairo_rios/domain/entities/countries_response.dart';
 import 'package:prueba_jairo_rios/domain/entities/states_response.dart';
@@ -16,16 +17,19 @@ class CountryInformationRepositoryImpl implements CountryInformationRepository {
   @override
   Future<Either<Failure, CountriesResponse>> getCountries() async {
     try {
-      final url = Uri.parse('https://countriesnow.space/api/v0.1/countries');
+      final url = Uri.parse(StringConstants.countriesUrl);
       final response = await client.get(url);
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
         return Right(CountriesResponse.fromJson(json));
       } else {
-        return const Left(Failure(message: 'Error al obtener los datos'));
+        return Left(
+          Failure(
+              message: '$StringConstants.getDataError: ${response.statusCode}'),
+        );
       }
     } catch (e) {
-      return Left(Failure(message: 'Error: $e'));
+      return Left(Failure(message: '$StringConstants.error: $e'));
     }
   }
 
@@ -34,12 +38,12 @@ class CountryInformationRepositoryImpl implements CountryInformationRepository {
       String country) async {
     try {
       final url = Uri.parse(
-        'https://countriesnow.space/api/v0.1/countries/states/q?country=${Uri.encodeComponent(country)}',
+        '${StringConstants.statesUrl}${Uri.encodeComponent(country)}',
       );
 
       final response = await client.get(
         url,
-        headers: {'Content-Type': 'application/json'},
+        headers: {StringConstants.contentType: StringConstants.applicationJson},
       );
 
       if (response.statusCode == 200) {
@@ -48,11 +52,11 @@ class CountryInformationRepositoryImpl implements CountryInformationRepository {
       } else {
         return Left(
           Failure(
-              message: 'Error al obtener los estados: ${response.statusCode}'),
+              message: '$StringConstants.getDataError: ${response.statusCode}'),
         );
       }
     } catch (e) {
-      return Left(Failure(message: 'Error: $e'));
+      return Left(Failure(message: '$StringConstants.error: $e'));
     }
   }
 
@@ -61,12 +65,12 @@ class CountryInformationRepositoryImpl implements CountryInformationRepository {
       String country, String state) async {
     try {
       final url = Uri.parse(
-        'https://countriesnow.space/api/v0.1/countries/state/cities/q?country=${Uri.encodeComponent(country)}&state=${Uri.encodeComponent(state)}',
+        '${StringConstants.citiesUrl}${Uri.encodeComponent(country)}&state=${Uri.encodeComponent(state)}',
       );
 
       final response = await client.get(
         url,
-        headers: {'Content-Type': 'application/json'},
+        headers: {StringConstants.contentType: StringConstants.applicationJson},
       );
 
       if (response.statusCode == 200) {
@@ -75,12 +79,11 @@ class CountryInformationRepositoryImpl implements CountryInformationRepository {
       } else {
         return Left(
           Failure(
-            message: 'Error al obtener las ciudades: ${response.statusCode}',
-          ),
+              message: '$StringConstants.getDataError: ${response.statusCode}'),
         );
       }
     } catch (e) {
-      return Left(Failure(message: 'Error: $e'));
+      return Left(Failure(message: '$StringConstants.error: $e'));
     }
   }
 }

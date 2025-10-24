@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:prueba_jairo_rios/core/strings_constants.dart';
 import 'package:prueba_jairo_rios/domain/entities/user_information.dart';
 import 'package:prueba_jairo_rios/presentation/provider/user_provider.dart';
 
@@ -18,7 +19,7 @@ class DetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Detalle usuario'),
+          title: const Text(StringConstants.detailScreenTitle),
           centerTitle: true,
         ),
         body: Center(
@@ -66,17 +67,20 @@ class DetailScreen extends ConsumerWidget {
             final shouldDelete = await showDialog<bool>(
               context: context,
               builder: (context) => AlertDialog(
-                title: const Text('Confirmar eliminación'),
-                content:
-                    const Text('¿Está seguro que desea eliminar este usuario?'),
+                title:
+                    const Text(StringConstants.detailScreenDeleteUserConfirm),
+                content: const Text(
+                    StringConstants.detailScreenDeleteUserConfirmMessage),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(context, false),
-                    child: const Text('Cancelar'),
+                    child: const Text(
+                        StringConstants.detailScreenDeleteUserCancel),
                   ),
                   TextButton(
                     onPressed: () => Navigator.pop(context, true),
-                    child: const Text('Eliminar'),
+                    child: const Text(
+                        StringConstants.detailScreenDeleteUserDelete),
                   ),
                 ],
               ),
@@ -100,7 +104,8 @@ class DetailScreen extends ConsumerWidget {
                   context.pop();
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
-                      content: Text('Usuario eliminado exitosamente'),
+                      content: Text(
+                          StringConstants.detailScreenDeleteUserDeleteMessage),
                       backgroundColor: Colors.green,
                     ),
                   );
