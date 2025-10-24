@@ -18,7 +18,7 @@ final statesFutureProvider = FutureProvider.family((ref, String country) async {
   final repository = ref.watch(countryInformationRepositoryProvider);
   final getStatesOfCountryUseCase =
   GetStatesOfCountryUseCase(countryInformationRepository: repository);
-  return await getStatesOfCountryUseCase.getCountries(country);
+  return await getStatesOfCountryUseCase.getStatesOfCountry(country);
 });
 
 final citiesFutureProvider =

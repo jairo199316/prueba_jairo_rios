@@ -10,6 +10,6 @@ class GetStatesOfCountryUseCase {
 
   final CountryInformationRepository countryInformationRepository;
 
-  Future<Either<Failure, StatesResponse>> getCountries(String country) async =>
+  Future<Either<Failure, StatesResponse>> getStatesOfCountry(String country) async =>
       await countryInformationRepository.getStatesOfCountry(country);
 }

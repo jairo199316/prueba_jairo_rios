@@ -1,18 +1,23 @@
 import 'package:dartz/dartz.dart';
+import 'package:http/http.dart' as http;
 import 'package:prueba_jairo_rios/core/failure.dart';
 import 'package:prueba_jairo_rios/domain/entities/cities_response.dart';
 import 'package:prueba_jairo_rios/domain/entities/countries_response.dart';
 import 'package:prueba_jairo_rios/domain/entities/states_response.dart';
 import 'package:prueba_jairo_rios/domain/repositories/country_information_repository.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class CountryInformationRepositoryImpl implements CountryInformationRepository {
+  CountryInformationRepositoryImpl({http.Client? client})
+      : client = client ?? http.Client();
+
+  final http.Client client;
+
   @override
   Future<Either<Failure, CountriesResponse>> getCountries() async {
     try {
       final url = Uri.parse('https://countriesnow.space/api/v0.1/countries');
-      final response = await http.get(url);
+      final response = await client.get(url);
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
         return Right(CountriesResponse.fromJson(json));
@@ -32,7 +37,7 @@ class CountryInformationRepositoryImpl implements CountryInformationRepository {
         'https://countriesnow.space/api/v0.1/countries/states/q?country=${Uri.encodeComponent(country)}',
       );
 
-      final response = await http.get(
+      final response = await client.get(
         url,
         headers: {'Content-Type': 'application/json'},
       );
@@ -59,7 +64,7 @@ class CountryInformationRepositoryImpl implements CountryInformationRepository {
         'https://countriesnow.space/api/v0.1/countries/state/cities/q?country=${Uri.encodeComponent(country)}&state=${Uri.encodeComponent(state)}',
       );
 
-      final response = await http.get(
+      final response = await client.get(
         url,
         headers: {'Content-Type': 'application/json'},
       );
